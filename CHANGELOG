@@ -3,16 +3,35 @@ django-registration-redux changelog
 ===================================
 
 
-Version 1.2, 23 October, 2014
--------------------------------
+Version 1.2, 11 May, 2015
+-------------------------
 
-* Feature: Added settings' options that allows to exlude the default auth urls (`INCLUDE_AUTH_URLS`) and register url (`INCLUDE_REGISTER_URL`).
+* BACKWARDS-INCOMPATIBLE CHANGE: When overriding the
+  `registration/activation_email.txt` template, you must also now override the
+  `registration/activation_email.html` template or set the setting
+  (`REGISTRATION_EMAIL_HTML`) to `False`.
 
-* Feature: Added support to dynamically import any chosen registration form using the settings option `REGISTRATION_FORM`.
+* BACKWARDS-INCOMPATIBLE CHANGE: An initial migration for Django > 1.7 has been
+  provided. South users will need to configure a null migration with
+  (`SOUTH_MIGRATION_MODULES`).
 
-* Enhancement: Make `RegistrationForm` a subclass of Django's `UserCreationForm`
+* BACKWARDS-INCOMPATIBLE CHANGE: A `base.html` template is now assumed to
+  exist.
 
-* Enhancement: Use registration form `save` method to create user instance, whenever form is a subclass of Django's `ModelForm`.
+* Feature: Added support for disabling HTML emails using the setting option
+  `REGISTRATION_EMAIL_HTML`.
+
+* Feature: Added settings' options that allows to exlude the default auth urls
+  (`INCLUDE_AUTH_URLS`) and register url (`INCLUDE_REGISTER_URL`).
+
+* Feature: Added support to dynamically import any chosen registration form
+  using the settings option `REGISTRATION_FORM`.
+
+* Enhancement: Make `RegistrationForm` a subclass of Django's
+  `UserCreationForm`
+
+* Enhancement: Use registration form `save` method to create user instance,
+  whenever form is a subclass of Django's `ModelForm`.
 
 
 
@@ -305,4 +324,4 @@ http://django-registration.googlecode.com/files/registration-0.1.tar.gz
 
 * First packaged version using distutils.
 
-* Added docs/ directory and overview. 
+* Added docs/ directory and overview.

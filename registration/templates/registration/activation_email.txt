@@ -1,5 +1,4 @@
 {% load i18n %}
-{% load url from future %}
 {% blocktrans with site_name=site.name %}
 You (or someone pretending to be you) have asked to register an account at
 {{ site_name }}.  If this wasn't you, please ignore this email
@@ -37,7 +36,7 @@ following context:
     depending on whether ``django.contrib.sites`` is installed, this
     may be an instance of either ``django.contrib.sites.models.Site``
     (if the sites application is installed) or
-    ``django.contrib.sites.models.RequestSite`` (if not). Consult `the
+    ``django.contrib.sites.requests.RequestSite`` (if not). Consult `the
     documentation for the Django sites framework
     <http://docs.djangoproject.com/en/dev/ref/contrib/sites/>`_ for
     details regarding these objects' interfaces.

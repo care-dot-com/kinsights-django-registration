@@ -7,17 +7,16 @@ from django.shortcuts import redirect
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 from django.conf import settings
-try:
-    from django.utils.module_loading import import_string
-except ImportError:
-    from registration.utils import import_string
-    
+from django.utils.decorators import method_decorator
+from django.utils.module_loading import import_string
+from django.views.decorators.debug import sensitive_post_parameters
 
-from registration import signals
-# from registration.forms import RegistrationForm
+# from .forms import RegistrationForm
+# from . import signals
 
-REGISTRATION_FORM_PATH = getattr(settings, 'REGISTRATION_FORM', 'registration.forms.RegistrationForm')
-REGISTRATION_FORM = import_string( REGISTRATION_FORM_PATH )
+REGISTRATION_FORM_PATH = getattr(settings, 'REGISTRATION_FORM',
+                                 'registration.forms.RegistrationForm')
+REGISTRATION_FORM = import_string(REGISTRATION_FORM_PATH)
 
 
 class _RequestPassingFormView(FormView):
@@ -77,6 +76,7 @@ class RegistrationView(_RequestPassingFormView):
     success_url = None
     template_name = 'registration/registration_form.html'
 
+    @method_decorator(sensitive_post_parameters('password1', 'password2'))
     def dispatch(self, request, *args, **kwargs):
         """
         Check that user signup is allowed before even bothering to

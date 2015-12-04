@@ -1,10 +1,14 @@
 from __future__ import unicode_literals
+from distutils.version import StrictVersion
 
-import django
+from django import get_version
 from django.test import TestCase
 
 from registration import forms
 from registration.users import UserModel
+
+
+DJANGO_VERSION = StrictVersion(get_version())
 
 
 class RegistrationFormTests(TestCase):
@@ -12,6 +16,7 @@ class RegistrationFormTests(TestCase):
     Test the default registration forms.
 
     """
+
     def test_registration_form(self):
         """
         Test that ``RegistrationForm`` enforces username constraints
@@ -22,9 +27,9 @@ class RegistrationFormTests(TestCase):
         # permitted.
         UserModel().objects.create_user('alice', 'alice@example.com', 'secret')
 
-        username_error = "This value may contain only letters, numbers and @/./+/-/_ characters."
-        if django.VERSION >= (1, 8):
-            username_error = "Enter a valid username. " + username_error
+        bad_username_error = 'This value may contain only letters, numbers and @/./+/-/_ characters.'
+        if DJANGO_VERSION >= StrictVersion('1.8'):
+            bad_username_error = 'Enter a valid username. ' + bad_username_error
 
         invalid_data_dicts = [
             # Non-alphanumeric username.
@@ -32,20 +37,20 @@ class RegistrationFormTests(TestCase):
                       'email': 'foo@example.com',
                       'password1': 'foo',
                       'password2': 'foo'},
-            'error': ('username', [username_error])},
+             'error': ('username', [bad_username_error])},
             # Already-existing username.
             {'data': {'username': 'alice',
                       'email': 'alice@example.com',
                       'password1': 'secret',
                       'password2': 'secret'},
-            'error': ('username', ["A user with that username already exists."])},
+             'error': ('username', ["A user with that username already exists."])},
             # Mismatched passwords.
             {'data': {'username': 'foo',
                       'email': 'foo@example.com',
                       'password1': 'foo',
                       'password2': 'bar'},
-            'error': ('password2', ["The two password fields didn't match."])},
-            ]
+             'error': ('password2', ["The two password fields didn't match."])},
+        ]
 
         for invalid_dict in invalid_data_dicts:
             form = forms.RegistrationForm(data=invalid_dict['data'])
